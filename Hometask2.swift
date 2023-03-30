@@ -1,0 +1,273 @@
+import Foundation
+class Car{
+
+    private var state:String
+    private let producer:String
+    private let model:String
+    private var engine:String
+    private var fuel:Double
+    private let fuelCap:Double
+    
+    init(producer:String,model:String,engine:String,fuelCap:Double)
+    {
+        self.producer=producer
+        self.model=model
+        self.engine=engine
+        self.fuelCap=fuelCap
+        self.state="Factory"
+        self.fuel=fuelCap
+    }
+    
+    func move(){
+        if (fuel==0){
+            print("Not enough fuel")
+        }
+        else{
+            fuel-=0.5
+            print("You moved forward")
+        }
+    }
+    func refuel(int liters:Double){
+        fuel+=liters
+        if (fuel>fuelCap){
+            print("remains: ",(fuel-fuelCap)," liters")
+            fuel=fuelCap
+        }
+    }
+    func getFuelCap()->Double{
+        return fuelCap
+    }
+    func getFuel()->Double{
+        return fuel
+    }
+    func getProducer()->String{
+        return producer
+    }
+    
+    func getEngine()->String{
+        return engine
+    }
+    
+    func getModel()->String{
+        return model
+    }
+    
+    func setState(newState:String){
+        state=newState
+    }
+    
+    func getState()->String{
+        return state
+    }
+    
+    func changeEng(newEng:String){
+        engine=newEng
+        print("Двигатель заменён")
+    }
+}
+class Tank:Car{
+
+    private var ammo:Int
+    
+    override init(producer:String,model:String,engine:String,fuelCap:Double)
+    {
+        ammo=0
+        super.init(producer:producer,model:model,engine:engine,fuelCap:fuelCap)
+    }
+    
+    func loadAmmo(count:Int){
+        ammo+=count
+        print("Succesfully")
+    }
+    func getAmmo()->Int{
+        return ammo
+    }
+    func shot(){
+        if(ammo==0){
+            print("Not enough ammo")
+        }
+        else{
+            print("BOOM")
+            ammo-=1
+        }
+    }
+}
+class FreightCar:Car{
+
+    private var load:Double
+    private let maxLoad:Double
+    
+    
+    init(producer:String,model:String,engine:String,fuelCap:Double,maxLoad:Double)
+    {
+        load=0
+      /*  print("Enter max load:")
+        maxLoad = Double(readLine()!)!*/
+        self.maxLoad=maxLoad
+        super.init(producer:producer,model:model,engine:engine,fuelCap:fuelCap)
+    }
+
+    func addWeight(weight:Double){
+        if (weight+load<maxLoad){
+            load+=weight
+            print("Succesfully")
+        }
+        else{
+            print("It's too much")
+        }
+    }
+    
+    func getMaxLoad()->Double{
+        return maxLoad
+    }
+    func subWeight(weight:Double){
+        if(load-weight<0){
+            load-=weight
+            print("Succesfully")
+        }
+        else{
+             print("It's too much")
+        }
+    }
+}
+class Bus:Car{
+    
+    private var doors:Bool
+    private var passCount:Int
+    
+    override init(producer:String,model:String,engine:String,fuelCap:Double)
+    {
+        doors=false
+        passCount=0
+        super.init(producer:producer,model:model,engine:engine,fuelCap:fuelCap)
+    }
+    
+    func openDoors(){
+        if (doors==true){
+            print("Already opened")
+        }
+        else{
+            doors=true
+            print("Doors opened")
+        }
+    }
+    func closeDoors(){
+        if (doors==false){
+            print("Already closed")
+        }
+        else{
+            doors=true
+            print("Doors closed")
+        }
+    }
+    func setPassengersCnt(cnt:Int){
+        passCount=cnt
+    }
+    func getPassengersCnt()->Int{
+        return passCount
+    }
+    
+}
+class Ambulance:Car{
+    private var lightSignal:Bool
+    private var siren:Bool
+    override init(producer:String,model:String,engine:String,fuelCap:Double)
+    {
+        lightSignal=false
+        siren=false
+        super.init(producer:producer,model:model,engine:engine,fuelCap:fuelCap)
+    }
+    func toggleSiren(){
+        if (siren==true){
+            print("Siren is off now")
+            siren=false
+        }
+        else{
+            siren=true
+            print("Siren is on now")
+        }
+    }
+    func toggleLightSign(){
+        if (lightSignal==true){
+            print("Signal is off now")
+            lightSignal=false
+        }
+        else{
+            lightSignal=true
+            print("Signal is on now")
+        }
+    }
+}
+class Factory{
+    
+    
+    private let name:String
+    public private(set) var cntCars:Int;
+    public private(set) var cntTank:Int;
+    public private(set) var cntFreight:Int;
+    public private(set) var cntBus:Int;
+    public private(set) var cntAmbulance:Int;
+    
+    init(name:String){
+        self.name=name
+        cntAmbulance=0
+        cntBus=0
+        cntFreight=0
+        cntTank=0
+        cntCars=0
+    }
+    
+    func createTank(model:String,engine:String,fuelCap:Double)->Tank{
+        cntTank+=1
+        cntCars+=1
+        return Tank(producer:name,model:model,engine:engine,fuelCap:fuelCap)
+    }
+    func createBus(model:String,engine:String,fuelCap:Double)->Bus{
+        cntBus+=1
+        cntCars+=1
+        return Bus(producer:name,model:model,engine:engine,fuelCap:fuelCap)
+    }
+    func createFreight(model:String,engine:String,fuelCap:Double,maxLoad:Double)->FreightCar{
+        cntFreight+=1
+        cntCars+=1
+        return FreightCar(producer:name,model:model,engine:engine,fuelCap:fuelCap,maxLoad:maxLoad)
+    }
+    func createAmbulance(model:String,engine:String,fuelCap:Double)->Ambulance{
+        cntAmbulance+=1
+        cntCars+=1
+        return Ambulance(producer:name,model:model,engine:engine,fuelCap:fuelCap)
+    }
+    /*
+    func createCar(type:String,model:String,engine:String,fuelCap:Double)->Car{
+        switch type{
+            case "Bus":
+                cntBus+=1
+                cntCars+=1
+                return Bus(producer:name,model:model,engine:engine,fuelCap:fuelCap)
+            case "Tank":
+                cntTank+=1
+                cntCars+=1
+                return Tank(producer:name,model:model,engine:engine,fuelCap:fuelCap)
+            case "FreightCar":
+                cntFreight+=1
+                cntCars+=1
+                return FreightCar(producer:name,model:model,engine:engine,fuelCap:fuelCap)
+            case "Ambulance":
+                cntAmbulance+=1
+                cntCars+=1
+                return Ambulance(producer:name,model:model,engine:engine,fuelCap:fuelCap)
+            default:
+                print("Factory can't do such cars, so you order is defective")
+                return Car(producer:"err",model:"err",engine:"err",fuelCap:0)
+        }
+    }
+    */
+}
+
+let factory=Factory(name:"BMW")
+var tank=factory.createTank(model:"B-56",engine:"KSE12",fuelCap:30)
+tank.loadAmmo(count:5)
+tank.shot()
+var freight=factory.createFreight(model:"testFreight",engine:"testeng",fuelCap:25,maxLoad:1000)
+freight.addWeight(weight:500)
+freight.addWeight(weight:501)

@@ -1,0 +1,11 @@
+func fibonachi(a:[Int],n:Int)->[Int]{
+    var b=a
+    for _ in 1...n {
+        b.append(b[b.count-1]+b[b.count-2])
+    }
+    print(b)
+    return b
+}
+var a=[1,1]
+print(a)
+a=fibonachi(a:a,n:3)

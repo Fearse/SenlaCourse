@@ -1,0 +1,11 @@
+import Foundation
+func kubUr(a:Int,b:Int,c:Int,d:Int){
+    let lbound = -100
+    let rbound = 100
+    for i in lbound...rbound{
+        if (a*i*i*i+b*i*i+c*i+d==0){
+            print(i," ")
+        }
+    }
+}
+kubUr(a:3,b:15,c:18,d:0)

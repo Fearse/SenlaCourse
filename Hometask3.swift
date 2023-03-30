@@ -1,0 +1,372 @@
+protocol Car{
+
+    var state:String {get set}
+    var producer:String{get}
+    var model:String{get}
+    var engineMark:String{get set}
+    var fuel:Double{get set}
+    var fuelCap:Double{get}
+    var tireType:String{get set}
+    mutating func changeTire()
+    mutating func setState(newState:String)
+    mutating func refuel(liters:Double)
+    mutating func changeEng(newEng:String)
+}
+extension Car{
+    mutating func refuel(liters:Double){
+        fuel+=liters
+        if (fuel>fuelCap){
+            print("remains: ",(fuel-fuelCap)," liters")
+            fuel=fuelCap
+        }
+    }
+    mutating func changeEng(newEng:String){
+        engineMark=newEng
+        print("Двигатель заменён")
+    }
+    mutating func setState(newState:String){
+        state=newState
+    }
+    mutating func changeTire(){
+        if (tireType=="Summer"){
+            print("Winter tires installed")
+            tireType="Winter"
+        }
+        else{
+            print("Summer tires installed")
+            tireType="Summer"
+        }
+    }
+}
+
+protocol Movement{
+    var engineStatus:String{get set}
+    var steerWheelStatus:String{get set}
+    var wheelPosition:String{get set}
+    var transmissionSpeed:Int{get set}
+ 
+    mutating func moveRight()
+    mutating func moveLeft()
+    mutating func switchSpeed(newSpeed:Int)
+    mutating func startEngine()
+    mutating func stopEngine()
+}
+extension Movement{
+    mutating func moveRight(){
+        steerWheelStatus="Right"
+        wheelPosition="Right"
+    }
+    mutating func moveLeft(){
+        steerWheelStatus="Left"
+        wheelPosition="Left"
+    }
+    mutating func switchSpeed(newSpeed:Int){
+        if (newSpeed>5 || newSpeed<0){
+            print("You enter wrong speed")
+        }
+        else{
+            if(newSpeed==0){
+            transmissionSpeed=newSpeed
+            engineStatus="Stopped"
+            }
+            else{
+            if(engineStatus=="Stopped"){
+                engineStatus="Working"
+            }
+            transmissionSpeed=newSpeed
+            print("Speed is changed")
+        }
+        }
+    }
+    mutating func startEngine(){
+        engineStatus="Working"
+    }
+    mutating func stopEngine(){
+        engineStatus="Stopped"
+    }
+}
+
+struct Tank:Car,Movement{
+    public private(set)var ammo:Int=0
+    
+    var engineStatus:String="Stopped"
+    var steerWheelStatus:String="Default"
+    var wheelPosition:String="Default"
+    var transmissionSpeed:Int=0
+    var state:String="Factory"
+    var tireType:String="Summer"
+    var producer:String=""
+    var model:String=""
+    var engineMark:String=""
+    var fuel:Double=0
+    var fuelCap:Double=0
+    init(){}
+    init(producer:String,model:String,engineMark:String,fuelCap:Double){
+        self.producer=producer
+        self.model=model
+        self.engineMark=engineMark
+        self.fuelCap=fuelCap
+        self.fuel=fuelCap
+    }
+    mutating func loadAmmo(count:Int){
+        ammo+=count
+        print("Succesfully")
+    }
+    mutating func shot(){
+        if(ammo==0){
+            print("Not enough ammo")
+        }
+        else{
+            print("BOOM")
+            ammo-=1
+        }
+    }
+}
+struct FreightCar:Car,Movement{ 
+    public private(set)var load:Double=0
+    public private(set)var maxLoad:Double=0
+    
+    var engineStatus:String="Stopped"
+    var steerWheelStatus:String="Default"
+    var wheelPosition:String="Default"
+    var transmissionSpeed:Int=0
+    var state:String="Factory"
+    var tireType:String="Summer"
+    var producer:String=""
+    var model:String=""
+    var engineMark:String=""
+    var fuel:Double=0
+    var fuelCap:Double=0
+    init(){}
+    init(producer:String,model:String,engineMark:String,fuelCap:Double,maxLoad:Double){
+        self.producer=producer
+        self.model=model
+        self.engineMark=engineMark
+        self.fuelCap=fuelCap
+        self.fuel=fuelCap
+        self.maxLoad=maxLoad
+    }
+    mutating func addWeight(weight:Double){
+        if (weight+load<maxLoad){
+            load+=weight
+            print("Succesfully")
+        }
+        else{
+            print("It's too much")
+        }
+    }
+    mutating func subWeight(weight:Double){
+        if(load-weight<0){
+            load-=weight
+            print("Succesfully")
+        }
+        else{
+             print("It's too much")
+        }
+    }
+}
+struct Bus:Car,Movement{
+    
+    public private(set)var doors:Bool=false
+    public private(set)var passCount:Int=0
+    
+    var engineStatus:String="Stopped"
+    var steerWheelStatus:String="Default"
+    var wheelPosition:String="Default"
+    var transmissionSpeed:Int=0
+    var state:String="Factory"
+    var tireType:String="Summer"
+    var producer:String=""
+    var model:String=""
+    var engineMark:String=""
+    var fuel:Double=0
+    var fuelCap:Double=0
+    init(){}
+    init(producer:String,model:String,engineMark:String,fuelCap:Double){
+        self.producer=producer
+        self.model=model
+        self.engineMark=engineMark
+        self.fuelCap=fuelCap
+        self.fuel=fuelCap
+    }
+    mutating func openDoors(){
+        if (doors==true){
+            print("Already opened")
+        }
+        else{
+            doors=true
+            print("Doors opened")
+        }
+    }
+    mutating func closeDoors(){
+        if (doors==false){
+            print("Already closed")
+        }
+        else{
+            doors=true
+            print("Doors closed")
+        }
+    }
+    mutating func setPassengersCnt(cnt:Int){
+        passCount=cnt
+    }
+}
+struct Ambulance:Car,Movement{
+    public private(set)var lightSignal:Bool=false
+    public private(set)var siren:Bool=false
+    
+    var engineStatus:String="Stopped"
+    var steerWheelStatus:String="Default"
+    var wheelPosition:String="Default"
+    var transmissionSpeed:Int=0
+    var state:String="Factory"
+    var tireType:String="Summer"
+    var producer:String=""
+    var model:String=""
+    var engineMark:String=""
+    var fuel:Double=0
+    var fuelCap:Double=0
+    init(){}
+    init(producer:String,model:String,engineMark:String,fuelCap:Double){
+        self.producer=producer
+        self.model=model
+        self.engineMark=engineMark
+        self.fuelCap=fuelCap
+        self.fuel=fuelCap
+    }
+    mutating func toggleSiren(){
+        if (siren==true){
+            print("Siren is off now")
+            siren=false
+        }
+        else{
+            siren=true
+            print("Siren is on now")
+        }
+    }
+    mutating func toggleLightSign(){
+        if (lightSignal==true){
+            print("Signal is off now")
+            lightSignal=false
+        }
+        else{
+            lightSignal=true
+            print("Signal is on now")
+        }
+    }
+}
+
+class Factory{
+    weak var dealer:Delegate?
+    public private(set) var name:String
+    public private(set) var cntCars:Int=0
+    public private(set) var cntTank:Int=0
+    public private(set) var cntFreight:Int=0
+    public private(set) var cntBus:Int=0
+    public private(set) var cntAmbulance:Int=0
+    init(name:String){
+        self.name=name
+    }
+    func createCar(type:String,model:String,engineMark:String,fuelCap:Double,maxLoad:Double){
+        switch type{
+            case "FreightCar":
+                cntFreight+=1
+                cntCars+=1
+                dealer?.freights.append(FreightCar(producer:name,model:model,engineMark:engineMark,fuelCap:fuelCap,maxLoad:maxLoad))
+            default:
+                print("Factory can't do such cars, so you order is defective")
+        }
+    }
+    func createCar(type:String,model:String,engineMark:String,fuelCap:Double){
+        switch type{
+            case "Bus":
+                cntBus+=1
+                cntCars+=1
+                dealer?.buses.append(Bus(producer:name,model:model,engineMark:engineMark,fuelCap:fuelCap))
+            case "Tank":
+                cntTank+=1
+                cntCars+=1
+                dealer?.tanks.append(Tank(producer:name,model:model,engineMark:engineMark,fuelCap:fuelCap))
+            case "Ambulance":
+                cntAmbulance+=1
+                cntCars+=1
+                dealer?.ambulances.append(Ambulance(producer:name,model:model,engineMark:engineMark,fuelCap:fuelCap))
+            default:
+                print("Factory can't do such cars, so you order is defective")
+        }
+    }
+}
+
+protocol Delegate:Dealer{
+    var tanks:[Tank]{get set}
+    var freights:[FreightCar]{get set}
+    var ambulances:[Ambulance]{get set}
+    var buses:[Bus]{get set}
+    var factory:Factory{get}
+    func makeOrder(type:String,model:String,engineMark:String,fuelCap:Double,maxLoad:Double)
+    func makeOrder(type:String,model:String,engineMark:String,fuelCap:Double)
+    func getOrder(with type:Bus,model:String)->Bus
+    func getOrder(with type:Tank,model:String)->Tank
+    func getOrder(with type:FreightCar,model:String)->FreightCar
+    func getOrder(with type:Ambulance,model:String)->Ambulance
+}
+class Dealer:Delegate{
+    public var tanks:[Tank]=[]
+    public var freights:[FreightCar]=[]
+    public var ambulances:[Ambulance]=[]
+    public var buses:[Bus]=[]
+    public private(set)var factory:Factory
+    
+    init(factory:Factory){
+        self.factory=factory
+    }
+    func makeOrder(type:String,model:String,engineMark:String,fuelCap:Double,maxLoad:Double){
+        factory.createCar(type:type,model:model,engineMark:engineMark,fuelCap:fuelCap,maxLoad:maxLoad)
+    }
+    func makeOrder(type:String,model:String,engineMark:String,fuelCap:Double){
+        factory.createCar(type:type,model:model,engineMark:engineMark,fuelCap:fuelCap)
+    }
+    func getOrder(with type:Bus,model:String)->Bus{
+        for i in 0..<buses.count{
+            if (buses[i].model==model){
+            return buses[i]
+            }
+        }
+        return Bus(producer:"Err",model:"Err",engineMark:"Err",fuelCap:0)
+    }
+    func getOrder(with type:Tank,model:String)->Tank{
+        for i in 0..<tanks.count{
+            if (tanks[i].model==model){
+            return tanks[i]
+            }
+        }
+        return Tank(producer:"Err",model:"Err",engineMark:"Err",fuelCap:0)
+    }
+    func getOrder(with type:FreightCar,model:String)->FreightCar{
+        for i in 0..<freights.count{
+            if (freights[i].model==model){
+            return freights[i]
+            }
+        }
+        return FreightCar(producer:"Err",model:"Err",engineMark:"Err",fuelCap:0,maxLoad:0)
+    }
+    func getOrder(with type:Ambulance,model:String)->Ambulance{
+        for i in 0..<ambulances.count{
+            if (ambulances[i].model==model){
+            return ambulances[i]
+            }
+        }
+        return Ambulance(producer:"Err",model:"Err",engineMark:"Err",fuelCap:0)
+    }
+}
+
+let factory=Factory(name:"BMW")
+let dealer=Dealer(factory:factory)
+factory.dealer=dealer
+dealer.makeOrder(type:"Tank",model:"B-56",engineMark:"KSE12",fuelCap:30)//witness table
+var tank=dealer.getOrder(with:Tank(),model:"B-56")
+tank.loadAmmo(count:1)
+tank.shot()//direct dispatch
+tank.moveLeft()//direct dispatch
+tank.shot()
+print(tank.model)
